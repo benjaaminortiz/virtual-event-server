@@ -20,15 +20,17 @@ app.get("/", (req, res) => {
 app.post("/", async (req, res) => {
     try{
         const {name, lastName, email, country, phoneNum, role} = req.body
-
-        const text = "INSERT INTO atTendanTs(name, lastname, email, country, phonenum, role) VALUES($1, $2, $3, $4, $5, $6) RETURNING *";
+        let data = {
+            name, lastName, email, country, phoneNum, role
+        }
+        const text = "INSERT INTO attendants(name, lastname, email, country, phonenum, role) VALUES($1, $2, $3, $4, $5, $6) RETURNING *";
         const values = [name, lastName, email, country, phoneNum, role];
 
-       const addToDatabase =  await pool.query(text, values);
-       res.send(addToDatabase).status(200);
-
-       console.log("Añadido con Éxito");
-    
+       const addToDatabase = await pool.query(text, values);
+       res.send(addToDatabase).status(200).end();
+        
+       console.log("Añadido con Éxito", data);
+ 
        } catch (err){
         console.error(err)
     }
